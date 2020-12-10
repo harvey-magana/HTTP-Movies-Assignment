@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
@@ -9,17 +9,31 @@ const initialState = {
     stars: []
 }
 
-const UpdateMovie = (props) => {
+const UpdateMovie = props => {
     const [movie, setMovie] = useState(initialState);
+    const { push } = useHistory();
+    const { id } = useParams();
 
     const handleChanges = (e) => {
         setMovie({ ...movie, [e.target.name]: e.target.value });
     };
+console.log(props)
 
-const handleSubmit = e => {
+useEffect(() => {
+    axios.get(`http://localhost:5000/api/movies/${id}`)
+    .then(res => setMovie(res.data))
+    .catch(err => console.error(err))
+},[id])
+
+    const handleSubmit = e => {
         e.preventDefault();
-      };
-    
+        axios.put(`http://localhost:5000/api/movies/${id}`, movie)
+        .then(res => {
+            setMovie(res.data)
+        })
+        .catch(err => console.error(err))
+    };
+
     return (
         <div>
         <h2>Update Movie</h2>

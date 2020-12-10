@@ -16,9 +16,10 @@ const MovieForm = (props) => {
     };
 
 const handleSubmit = e => {
-        axios.post("http://localhost:5000/api/movies", this.state.movies)
+        axios.post("http://localhost:5000/api/movies", movie)
         .then(res => {
             console.log(res.data)
+            setMovie(res.data)
         })
         .catch(err => {
             console.log(err.response);

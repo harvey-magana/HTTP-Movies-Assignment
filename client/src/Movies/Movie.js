@@ -27,12 +27,25 @@ function Movie({ addToSavedList }) {
     return <div>Loading movie information...</div>;
   }
 
+  const handleDelete = e => {
+    e.preventDefault();
+    axios.delete(`http://localhost:5000/api/movies/${movie.id}`)
+    .then(res => {
+        console.log("I am going to delete it...")
+        setMovie(res.data)
+    })
+    .catch(err => console.error(err))
+  };
+
   return (
     <div className="save-wrapper">
       <MovieCard movie={movie} />
 
       <button className="md-button" onClick={() => push(`/update-movie/${movie.id}`)}>
         Edit
+      </button>
+      <button className="md-button" onClick={handleDelete}>
+        Delete
       </button>
       <div className="save-button" onClick={saveMovie}>
         Save
