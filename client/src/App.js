@@ -35,7 +35,7 @@ const App = () => {
       </Route>
 
       <Route path="/movies/:id">
-        <Movie addToSavedList={addToSavedList} />
+        <Movie addToSavedList={addToSavedList} movieList={movieList} setMovieList={setMovieList} />
       </Route>
 
       <Route path="/add-movie" component={MovieForm} />
