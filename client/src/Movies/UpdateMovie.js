@@ -6,13 +6,15 @@ const initialState = {
     title: '',
     director: '',
     metascore: '',
-    stars: ['', '', '']
+    stars: ''
 }
 
 const UpdateMovie = props => {
     const [movie, setMovie] = useState(initialState);
     const { push } = useHistory();
     const { id } = useParams();
+    const { movieList, setMovieList } = props
+    console.log(movie)
 
     const handleChanges = (e) => {
         setMovie({ ...movie, [e.target.name]: e.target.value });
@@ -20,37 +22,36 @@ const UpdateMovie = props => {
 
 useEffect(() => {
     axios.get(`http://localhost:5000/api/movies/${id}`)
-    .then(res => setMovie(res.data))
+    .then(res => {
+        setMovie({...res.data, stars: res.data.stars.toString()})
+    })
     .catch(err => console.error(err))
 },[id])
 
     const handleSubmit = e => {
-        /*
+        
         const newMovie = {
+            id: movie.id,
             title: movie.title, 
             director: movie.director, 
             metascore: movie.metascore, 
-            stars: [
-                movie.actor1, 
-                movie.actor2, 
-                movie.actor3
-            ]
+            stars: movie.stars.split(",")
         }
-        */
+        
 
         e.preventDefault();
-        axios.put(`http://localhost:5000/api/movies/${id}`, movie)
+        axios.put(`http://localhost:5000/api/movies/${movie.id}`, newMovie)
         .then(res => {
             //props.setMovie(res.data)
             const movieReturned = [res.data].find(item => item.id == id);
             console.log(movieReturned);
-/*             props.setMovie(props.movie.map(item => {
-                if(item.id === movieReturned) {
+            setMovieList(movieList.map(item => {
+                if(item.id === movieReturned.id) {
                     return movieReturned
                 }
                 return item
-            })) */
-            setMovie(movieReturned)
+            }))
+            //setMovie(movieReturned)
             //push(`/update-movie/${id}`)
             push(`/`)
         })
@@ -89,20 +90,21 @@ useEffect(() => {
           />
         </label>
         <label>
-          Actor 1:
+          Actors:
           <input
             type="text"
-            name="actor1"
-            value={movie.stars[0]}
+            name="stars"
+            value={movie.stars}
             onChange={handleChanges}
           />
         </label>
+        {/* 
         <label>
           Actor 2:
           <input
             type="text"
             name="actor2"
-            value={movie.stars[1]}
+            value={movie.actor2}
             onChange={handleChanges}
           />
         </label>
@@ -111,10 +113,12 @@ useEffect(() => {
           <input
             type="text"
             name="actor3"
-            value={movie.stars[2]}
+            value={movie.actor3}
             onChange={handleChanges}
           />
         </label>
+        */}
+
         <button type="submit">Submit</button>
       </form>
         </div>

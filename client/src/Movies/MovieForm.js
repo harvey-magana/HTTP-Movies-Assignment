@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
 import axios from 'axios';
 
 const initialState = {
@@ -13,7 +12,6 @@ const initialState = {
 
 const MovieForm = (props) => {
     const [movie, setMovie] = useState(initialState);
-    const { push } = useHistory();
 
     const handleChanges = (e) => {
         setMovie({ ...movie, [e.target.name]: e.target.value });
